@@ -1,0 +1,79 @@
+package za.ac.iie.petapp
+
+import androidx.appcompat.app.AppCompatActivity
+import android.os.Bundle
+import android.view.View
+import android.view.animation.AnimationUtils
+import android.widget.Button
+import android.widget.TextView
+import org.w3c.dom.Text
+
+class ActionPage : AppCompatActivity() {
+    // Declare variables
+    private lateinit var btnClean: Button
+    private lateinit var btnPlay: Button
+    private lateinit var btnFeed: Button
+    private var Hungry = 100
+    private var Clean = 50
+    private var Play = 10
+    private lateinit var dirtyPig: View
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_action_page)
+        // Initialize variables
+        btnClean = findViewById<Button>(R.id.btnClean)
+        btnPlay = findViewById(R.id.btnPlay)
+        btnFeed = findViewById(R.id.btnFeed)
+        dirtyPig = findViewById(R.id.dirtyPig)
+
+        // Load animations
+        val FeedAnimation = AnimationUtils.loadAnimation(this, R.anim.feed_animation)
+        val PlayAnimation = AnimationUtils.loadAnimation(this, R.anim.play_animation)
+        val CleanAnimation = AnimationUtils.loadAnimation(this, R.anim.clean_animation)
+
+        // Set click listeners for buttons
+        btnClean.setOnClickListener {
+            dirtyPig.startAnimation(CleanAnimation)
+            btnClean() // Call function to update Clean variable
+            updateUI() // Update UI after button click
+        }
+        btnPlay.setOnClickListener {
+            dirtyPig.startAnimation(PlayAnimation)
+            btnPlay() // Call function to update Play variable
+            updateUI() // Update UI after button click
+        }
+        btnFeed.setOnClickListener {
+            dirtyPig.startAnimation(FeedAnimation)
+            btnFeed() // Call function to update Hungry variable
+            updateUI() // Update UI after button click
+        }
+
+        updateUI() // Update UI initially
+    }
+
+    // Function to handle feeding button click
+    private fun btnFeed() {
+        if (Hungry < 100) Hungry += 10 // Increase Hungry by 10 if it's less than 100
+    }
+
+    // Function to handle playing button click
+    private fun btnPlay() {
+        if (Play < 100) Play += 10 // Increase Play by 10 if it's less than 100
+    }
+
+    // Function to handle cleaning button click
+    private fun btnClean() {
+        if (Clean < 100) Clean += 10 // Increase Clean by 10 if it's less than 100
+    }
+
+    // Function to update the UI with current values
+    private fun updateUI() {
+        val Boredtxt = findViewById<TextView>(R.id.txtPlay)
+        val Cleantxt = findViewById<TextView>(R.id.txtClean)
+        val HungryTxt = findViewById<TextView>(R.id.txtFeed)
+
+        Boredtxt.text = "Zoey wants to play: $Play" // Display Play value in UI
+        Cleantxt.text = "Clean Zoey: $Clean" // Display Clean value in UI
+        HungryTxt.text = "Feed Zoey: $Hungry" // Display Hungry value in UI
+    }
